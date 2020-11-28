@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="window" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="lesson4.ChatController">
+    <children>
+        <VBox prefHeight="600.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <MenuBar prefHeight="25.0" prefWidth="400.0">
+                    <menus>
+                        <Menu mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit"/>
+                                <MenuItem mnemonicParsing="false" onAction="#close" text="Close"/>
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <TextArea fx:id="output" editable="false" prefColumnCount="1" prefHeight="570.0" prefRowCount="2"
+                          prefWidth="400.0"/>
+                <HBox prefHeight="50.0" prefWidth="400.0">
+                    <children>
+                        <TextField fx:id="input" onAction="#send" prefColumnCount="2" prefHeight="50.0"
+                                   prefWidth="370.0">
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                        </TextField>
+                        <Button fx:id="btnSend" maxHeight="50.0" maxWidth="50.0" minHeight="50.0" minWidth="50.0"
+                                mnemonicParsing="false" onAction="#send" prefHeight="50.0" prefWidth="50.0">
+                            <font>
+                                <Font name="Kristen ITC" size="12.0"/>
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
