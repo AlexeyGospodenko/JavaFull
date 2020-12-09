@@ -1,4 +1,4 @@
-package lesson4;
+package Chat;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
@@ -16,7 +16,7 @@ public class RegistrationController {
             password.clear();
         } else {
             MockAuthServiceImpl.getInstance().addUser(login.getText(), password.getText());
-            new CreateWindow("auth.fxml", "NetChat - Authorization");
+            new CreateWindow("auth.fxml", "NetChat - Authorization",false);
             window.getScene().getWindow().hide();
         }
     }

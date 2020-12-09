@@ -1,4 +1,4 @@
-package lesson4;
+package Chat;
 
 public interface AuthService {
 
