@@ -9,19 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>chat</artifactId>
+    <artifactId>Server</artifactId>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>ru.geekbrains</groupId>
-                <artifactId>ru.geekbrains</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

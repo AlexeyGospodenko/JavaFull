@@ -1,4 +1,43 @@
-sdfsdf
-sdfsdf
-sdfhgfhfgh
-fghfgggggggggggg
+09.12.2020 16:01:39 SYSTEM: history1
+09.12.2020 16:01:39 SYSTEM: history2
+09.12.2020 16:01:39 SYSTEM: history3
+
+09.12.2020 16:43:51 SYSTEM: User "admin" has joined the channel
+09.12.2020 16:44:02 SYSTEM: User "Alex" has joined the channel
+09.12.2020 16:44:28 SYSTEM: User "Ivan" has joined the channel
+09.12.2020 16:44:33 SYSTEM: Hello all
+09.12.2020 16:44:45 PM to Ivan: hello Vanya
+09.12.2020 16:44:53 PM from Alex: hello
+09.12.2020 16:44:57 SYSTEM: User "Alex" has left the channel
+09.12.2020 16:49:08 SYSTEM: User "Ivan" has joined the channel
+09.12.2020 16:49:19 PM from admin: hello Ivan
+09.12.2020 16:49:35 SYSTEM: hello all
+09.12.2020 16:49:37 admin: hi
+09.12.2020 16:49:40 Alex: hi
+09.12.2020 16:49:42 Ivan: hi
+09.12.2020 16:49:45 SYSTEM: User "admin" has left the channel
+09.12.2020 16:49:48 SYSTEM: User "Alex" has left the channel
+9.12.2020 16:49:40 Alex: hi
+09.12.2020 16:49:42 Ivan: hi
+09.12.2020 16:54:28 SYSTEM: User "Alex" has joined the channel
+09.12.2020 16:54:55 PM to admin: hello mr Administrator
+09.12.2020 16:55:01 PM from ivan: hi
+09.12.2020 16:55:05 SYSTEM: hello all
+09.12.2020 16:55:07 admin: hi
+09.12.2020 16:55:11 ivan: hi
+09.12.2020 16:55:13 Alex: hi
+09.12.2020 16:55:16 SYSTEM: User "admin" has left the channel
+09.12.2020 16:55:19 SYSTEM: User "ivan" has left the channel
+ Alex: hi
+09.12.2020 16:55:58 SYSTEM: User "admin" has joined the channel
+09.12.2020 16:56:06 SYSTEM: User "Alex" has joined the channel
+09.12.2020 16:56:33 SYSTEM: User "Ivan" has joined the channel
+09.12.2020 16:56:42 PM to Ivan: hello Ivan
+09.12.2020 16:56:55 PM from Alex: hello mr Administrator
+09.12.2020 16:57:09 PM from Ivan: hi
+09.12.2020 16:57:13 SYSTEM: hello all
+09.12.2020 16:57:15 admin: hi
+09.12.2020 16:57:18 Alex: hi
+09.12.2020 16:57:20 Ivan: hi
+09.12.2020 16:57:22 SYSTEM: User "Ivan" has left the channel
+09.12.2020 16:57:25 SYSTEM: User "Alex" has left the channel

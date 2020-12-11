@@ -1,14 +1,16 @@
-package lesson4;
+package Chat;
 
 import java.util.HashMap;
 
 public class MockAuthServiceImpl implements AuthService {
     private static MockAuthServiceImpl instance;
     private HashMap<String, String> userDao;
+    private String userName;
 
     private MockAuthServiceImpl() {
         userDao = new HashMap();
         userDao.put("admin", "pass");
+        userDao.put("Alex", "123");
     }
 
     public static MockAuthServiceImpl getInstance() {
@@ -23,6 +25,13 @@ public class MockAuthServiceImpl implements AuthService {
     }
 
     public boolean auth(String name, String pass) {
-        return userDao.get(name).equals(pass);
+        if (userDao.get(name) != null) {
+            userName = name;
+            return (userDao.get(name).equals(pass));
+        } else return false;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

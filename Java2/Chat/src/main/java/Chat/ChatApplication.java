@@ -1,13 +1,12 @@
-
-package lesson4;
+package Chat;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class ChatApplication extends Application {
+public class ChatApplication extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        new CreateWindow("auth.fxml", "NetChat - Authorization");
+       new CreateWindow("auth.fxml", "NetChat - Authorization", false);
     }
 }
