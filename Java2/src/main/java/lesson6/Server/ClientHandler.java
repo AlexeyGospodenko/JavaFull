@@ -44,7 +44,7 @@ public class ClientHandler implements Runnable, Closeable {
                     break;
                 }
             } catch (IOException e) {
-                System.out.println("Client kicked");
+                System.out.println("Client was lost");
                 break;
             }
             System.out.println("Received from client: " + message);

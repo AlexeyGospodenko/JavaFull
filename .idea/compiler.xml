@@ -6,14 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Java2" />
         <module name="Chat" />
+        <module name="Server" />
         <module name="Java3" />
-        <module name="Java1" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Kava2" target="1.5" />
-    </bytecodeTargetLevel>
   </component>
 </project>

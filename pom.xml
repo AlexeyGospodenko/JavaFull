@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>ru.geekbrains</groupId>
     <artifactId>JavaFull</artifactId>
     <packaging>pom</packaging>
     <version>1</version>
@@ -12,8 +12,8 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <groupId>ru.geekbrains</groupId>
+                <artifactId>ru.geekbrains</artifactId>
                 <configuration>
                     <source>15</source>
                     <target>15</target>
@@ -21,7 +21,6 @@
             </plugin>
         </plugins>
     </build>
-
     <modules>
         <module>Java1</module>
         <module>Java2</module>
