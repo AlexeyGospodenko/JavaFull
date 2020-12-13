@@ -9,6 +9,9 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/Java1/Server/pom.xml" />
+        <option value="$PROJECT_DIR$/Java2/Chat/pom.xml" />
+        <option value="$PROJECT_DIR$/Java2/pom.xml" />
         <option value="$PROJECT_DIR$/Kava2/pom.xml" />
       </set>
     </option>
