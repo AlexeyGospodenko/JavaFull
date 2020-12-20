@@ -42,10 +42,18 @@ public class Message implements Serializable {
         return userName;
     }
 
-    @Override
-    public String toString() {
+    public String getFormattedMessage() {
         return formatter.format(sendTime) + " " +
                 ((!userName.equals("")) ? userName + ": " : "") +
                 message + '\n';
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "sendTime=" + sendTime +
+                ", userName='" + userName + '\'' +
+                ", message='" + message + '\'' +
+                '}';
     }
 }
