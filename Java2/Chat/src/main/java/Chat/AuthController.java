@@ -1,6 +1,5 @@
 package Chat;
 
-import Server.Message;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -8,6 +7,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.sql.SQLException;
 
 public class AuthController {
 
@@ -17,20 +17,20 @@ public class AuthController {
     public TextField txtHost;
     public TextField txtPort;
 
-    public void enter(ActionEvent actionEvent) throws IOException{
-        boolean auth = MockAuthServiceImpl.getInstance().auth(login.getText(), password.getText());
-        if (auth) {
+    public void enter(ActionEvent actionEvent) throws IOException, SQLException {
+        String auth = AuthServiceImpl.getInstance().auth(login.getText(), password.getText());
+        if (auth != null) {
             try {
                 new ChatSocket(new Socket(txtHost.getText(), Integer.parseInt(txtPort.getText())));
-                new CreateWindow("chat.fxml", "NetChat - User: " + login.getText(), true);
+                new CreateWindow("chat.fxml", "NetChat - User: " + auth, true);
                 window.getScene().getWindow().hide();
             } catch (ConnectException e) {
-                txtHost.setStyle("-fx-border-radius: 5; -fx-border-color: red; -fx-background-insets: 0;");
-                txtPort.setStyle("-fx-border-radius: 5; -fx-border-color: red; -fx-background-insets: 0;");
+                txtHost.setStyle(ClientConstants.getActionFail());
+                txtPort.setStyle(ClientConstants.getActionFail());
             }
         } else {
-            login.setStyle("-fx-border-radius: 5; -fx-border-color: red; -fx-background-insets: 0;");
-            password.setStyle("-fx-border-radius: 5; -fx-border-color: red; -fx-background-insets: 0;");
+            login.setStyle(ClientConstants.getActionFail());
+            password.setStyle(ClientConstants.getActionFail());
             password.clear();
         }
     }

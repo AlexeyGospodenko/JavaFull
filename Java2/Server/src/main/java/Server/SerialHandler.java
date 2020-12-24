@@ -9,7 +9,7 @@ public class SerialHandler implements Runnable, Closeable {
     private final ObjectInputStream is;
     private boolean running;
     private final ServerController serverController;
-    private String userName;
+    private String nickname;
 
     public SerialHandler(Socket socket, ServerController serverController) throws IOException {
         os = new ObjectOutputStream(socket.getOutputStream());
@@ -30,35 +30,51 @@ public class SerialHandler implements Runnable, Closeable {
                 Message message = (Message) is.readObject();
 
                 //Управляющие сообщения
-                if (message.getUserName().equals(ServerConstans.SYSTEM_USER)) {
-                    if (message.getMessage().startsWith(ServerConstans.PREFIX_GET_USER_NAME)) {
-                        userName = message.getMessage().substring(ServerConstans.PREFIX_GET_USER_NAME.length());
-                        Message messageJoin = Message.of(ServerConstans.SYSTEM_USER, "User \"" + userName + "\" has joined the channel");
+                //Идентицикация имени и сообщение о присоединение к чату
+                if (message.getUserName().equals(ServerConstants.getSystemUser())) {
+                    if (message.getMessage().startsWith(ServerConstants.getPrefixGetUserName())) {
+                        nickname = message.getMessage().substring(ServerConstants.getPrefixGetUserName().length());
+                        Message messageJoin = Message.of(ServerConstants.getSystemUser(), "User \"" + nickname + "\" has joined the channel");
                         serverController.broadCast(messageJoin);
-                        serverController.getTxtChat().appendText(messageJoin.toString());
+                        serverController.getTxtChat().appendText(messageJoin.getFormattedMessage());
                         continue;
                     }
                 }
 
-                if (message.getMessage().toLowerCase().startsWith(ServerConstans.PREFIX_PRIVATE_MESSAGE)) {
-                    String[] data = message.getMessage().substring(ServerConstans.PREFIX_PRIVATE_MESSAGE.length()).split(" ", 2);
+                //Личные сообщения
+                if (message.getMessage().toLowerCase().startsWith(ServerConstants.getPrefixPrivateMessage())) {
+                    String[] data = message.getMessage().substring(ServerConstants.getPrefixPrivateMessage().length()).split(" ", 2);
                     if (data.length == 2) {
                         Message messageTo = Message.of(data[0], "PM from " + message.getUserName() + ": " + data[1]);
                         serverController.sendMessageTo(messageTo, data[0]);
-                        serverController.getTxtChat().appendText(messageTo.toString());
+                        serverController.getTxtChat().appendText(messageTo.getFormattedMessage());
 
                         Message messageFrom = Message.of(message.getUserName(), "PM to " + data[0] + ": " + data[1]);
                         serverController.sendMessageTo(messageFrom, message.getUserName());
-                        serverController.getTxtChat().appendText(messageFrom.toString());
+                        serverController.getTxtChat().appendText(messageFrom.getFormattedMessage());
                         continue;
                     }
                 }
+
+                //Смена ника
+                if (message.getMessage().toLowerCase().startsWith(ServerConstants.getPrefixChangeNicknameMessage())) {
+                    String[] data = message.getMessage().substring(ServerConstants.getPrefixChangeNicknameMessage().length()).split(" ", 2);
+                    if (data.length == 1) {
+                        Message messageChangeNickname = Message.of(ServerConstants.getSystemUser(),
+                                "User \"" + nickname + "\" change nickname to \"" + data[0] +"\"");
+                        nickname = data[0];
+                        serverController.broadCast(messageChangeNickname);
+                        serverController.getTxtChat().appendText(messageChangeNickname.getFormattedMessage());
+                        continue;
+                    }
+                }
+
                 serverController.broadCast(message);
-                serverController.getTxtChat().appendText(message.toString());
+                serverController.getTxtChat().appendText(message.getFormattedMessage());
 
             } catch (IOException | ClassNotFoundException e) {
-                Message messageLeft = Message.of(ServerConstans.SYSTEM_USER, "User \"" + userName + "\" has left the channel");
-                serverController.getTxtChat().appendText(messageLeft.toString());
+                Message messageLeft = Message.of(ServerConstants.getSystemUser(), "User \"" + nickname + "\" has left the channel");
+                serverController.getTxtChat().appendText(messageLeft.getFormattedMessage());
                 serverController.kickClient(this);
                 try {
                     serverController.broadCast(messageLeft);
@@ -70,8 +86,8 @@ public class SerialHandler implements Runnable, Closeable {
         }
     }
 
-    public String getUserName() {
-        return userName;
+    public String getNickname() {
+        return nickname;
     }
 
     @Override
