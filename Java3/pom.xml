@@ -4,12 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>JavaFull</artifactId>
-        <groupId>org.example</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>ru.geekbrains</groupId>
+        <version>1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Java3</artifactId>
+    <artifactId>java3</artifactId>
 
+    <properties>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+    </properties>
 
 </project>
