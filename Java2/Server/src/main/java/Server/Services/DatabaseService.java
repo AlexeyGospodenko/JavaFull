@@ -1,8 +1,8 @@
-package Chat;
+package Server.Services;
 
 import java.sql.SQLException;
 
-public interface AuthService {
+public interface DatabaseService {
 
     void addUser(String name, String pass, String nickName) throws SQLException;
 

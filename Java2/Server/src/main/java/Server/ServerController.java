@@ -1,6 +1,6 @@
 package Server;
 
-import javafx.event.ActionEvent;
+import Server.Services.DatabaseServiceImpl;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -26,8 +26,12 @@ public class ServerController {
     private ConcurrentLinkedDeque<SerialHandler> clients = new ConcurrentLinkedDeque<>();
 
     public void serverStart() {
-        createServerThread();
-        btnStart.setDisable(true);
+        txtLog.appendText(Message.of(ServerConstants.getServerUser(), DatabaseServiceImpl.getInstance().dbConnect()).getFormattedMessage());
+
+        if (DatabaseServiceImpl.getInstance().isDbConnect()) {
+            createServerThread();
+            btnStart.setDisable(true);
+        }
     }
 
     private void createServerThread() {
@@ -82,7 +86,7 @@ public class ServerController {
         clients.remove(client);
     }
 
-    public void createScheme(ActionEvent actionEvent) throws SQLException, ClassNotFoundException {
+    public void createScheme() throws SQLException, ClassNotFoundException {
         Class.forName("oracle.jdbc.driver.OracleDriver");
         Connection connection = DriverManager.getConnection(txtJdbcUrl.getText(), "CHAT_AUTH", "CHAT_AUTH");
         Statement statement = connection.createStatement();

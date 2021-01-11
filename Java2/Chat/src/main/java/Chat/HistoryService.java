@@ -1,11 +1,13 @@
 package Chat;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public interface HistoryService {
 
-    void save(List<String> chat);
+    List<String> getHistory(int maxLines) throws IOException;
 
-    List<String> load();
+    void saveMessage(String history) throws IOException;
 
 }

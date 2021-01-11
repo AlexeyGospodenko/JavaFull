@@ -13,7 +13,7 @@
     <AnchorPane layoutY="100.0" prefHeight="300.0" prefWidth="530.0" style="-fx-background-color: fafafa;"
                 AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                 AnchorPane.topAnchor="100.0">
-        <TextField fx:id="login" layoutX="150.0" layoutY="90.0" onAction="#enter" prefHeight="30.0" prefWidth="200.0"
+        <TextField fx:id="txtLogin" layoutX="150.0" layoutY="90.0" onAction="#enter" prefHeight="30.0" prefWidth="200.0"
                    promptText="Login"
                    style="-fx-border-color: lightgreen; -fx-border-radius: 5; -fx-background-insets: 0;"
                    AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0">
@@ -28,7 +28,7 @@
                 <Font name="Kristen ITC" size="36.0"/>
             </font>
         </Label>
-        <TextField fx:id="password" layoutX="150.0" layoutY="150.0" onAction="#enter" prefHeight="30.0"
+        <TextField fx:id="txtPassword" layoutX="150.0" layoutY="150.0" onAction="#enter" prefHeight="30.0"
                    prefWidth="200.0" promptText="Password"
                    style="-fx-border-color: lightgreen; -fx-border-radius: 5; -fx-background-insets: 0;"
                    AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0">

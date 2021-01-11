@@ -3,9 +3,17 @@ package Server;
 public class ServerConstants {
     private final static String SYSTEM_USER = "SYSTEM";
     private final static String SERVER_USER = "SERVER";
+    private final static String CURRENT_USER = "USER";
+
+    private final static String PREFIX_REGISTER_MESSAGE = "/REGISTER ";
+    private final static String PREFIX_AUTH_MESSAGE = "/AUTH ";
     private final static String PREFIX_PRIVATE_MESSAGE = "/w ";
     private final static String PREFIX_CHANGE_NICKNAME_MESSAGE = "/changenickname ";
-    private final static String PREFIX_GET_USER_NAME = "MyNameIs";
+
+    private final static String AUTH_FAILED_MESSAGE = "login or password is not valid\n";
+    private final static String LOGIN_BUSY_MESSAGE = "Login or password is \n";
+    private final static String NICKNAME_BUSY_MESSAGE = "Nickname is busy\n";
+    private final static String IS_REGISTRATION_MESSAGE = "true";
 
     private final static String SQL_CREATE_SCHEME = "DECLARE \n" +
             "   V_SQL VARCHAR2(4000);\n" +
@@ -45,19 +53,43 @@ public class ServerConstants {
         return SERVER_USER;
     }
 
+    public static String getCurrentUser() {
+        return CURRENT_USER;
+    }
+
+    public static String getPrefixRegisterMessage() {
+        return PREFIX_REGISTER_MESSAGE;
+    }
+
+    public static String getPrefixAuthMessage() {
+        return PREFIX_AUTH_MESSAGE;
+    }
+
     public static String getPrefixPrivateMessage() {
         return PREFIX_PRIVATE_MESSAGE;
     }
 
-    public static String getPrefixGetUserName() {
-        return PREFIX_GET_USER_NAME;
+    public static String getPrefixChangeNicknameMessage() {
+        return PREFIX_CHANGE_NICKNAME_MESSAGE;
+    }
+
+    public static String getAuthFailedMessage() {
+        return AUTH_FAILED_MESSAGE;
+    }
+
+    public static String getLoginBusyMessage() {
+        return LOGIN_BUSY_MESSAGE;
+    }
+
+    public static String getNicknameBusyMessage() {
+        return NICKNAME_BUSY_MESSAGE;
+    }
+
+    public static String getIsRegistrationMessage() {
+        return IS_REGISTRATION_MESSAGE;
     }
 
     static String getSqlCreateScheme() {
         return SQL_CREATE_SCHEME;
-    }
-
-    public static String getPrefixChangeNicknameMessage() {
-        return PREFIX_CHANGE_NICKNAME_MESSAGE;
     }
 }

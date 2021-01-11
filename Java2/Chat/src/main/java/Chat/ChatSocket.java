@@ -6,7 +6,7 @@ public class ChatSocket {
     private static Socket socket;
 
     public ChatSocket(Socket socket) {
-        this.socket = socket;
+        ChatSocket.socket = socket;
     }
 
     public static Socket getSocket() {

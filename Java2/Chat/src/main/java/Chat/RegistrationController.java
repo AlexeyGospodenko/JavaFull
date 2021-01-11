@@ -1,55 +1,70 @@
 package Chat;
 
-import javafx.event.ActionEvent;
+import Server.Message;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-
 import java.io.IOException;
 
 public class RegistrationController {
+    public AnchorPane window;
     public TextField txtLogin;
     public TextField txtPassword;
-    public AnchorPane window;
     public TextField txtNickname;
     public Button btnExit;
     private boolean checkLogin = false;
     private boolean checkNickname = false;
 
-    public void register(ActionEvent actionEvent) throws Exception {
+    public void register() throws Exception {
         if (txtLogin.getText().equals("") || txtPassword.getText().equals("") || txtNickname.getText().equals("")) {
             txtLogin.setStyle(ClientConstants.getActionFail());
             txtPassword.setStyle(ClientConstants.getActionFail());
             txtNickname.setStyle(ClientConstants.getActionFail());
             txtPassword.clear();
         } else {
+            ServerService.getInstance().getOs().writeObject(Message.of(ClientConstants.getSystemUser(),
+                    ClientConstants.getPrefixRegisterMessage() + txtLogin.getText() + " " + txtPassword.getText() + " " + txtNickname.getText()));
             txtPassword.setStyle(ClientConstants.getActionSuccess());
-            if (AuthServiceImpl.getInstance().isNicknameExists(txtNickname.getText())) {
-                txtNickname.setStyle(ClientConstants.getActionFail());
-                txtNickname.clear();
-                txtNickname.setPromptText("Nickname is busy");
-            } else {
-                txtNickname.setStyle(ClientConstants.getActionSuccess());
-                checkNickname = true;
-            }
-            if (AuthServiceImpl.getInstance().isLoginExists(txtLogin.getText())) {
-                txtLogin.setStyle(ClientConstants.getActionFail());
-                txtLogin.clear();
-                txtLogin.setPromptText("Login is busy");
-            } else {
-                txtLogin.setStyle(ClientConstants.getActionSuccess());
-                checkLogin = true;
-            }
 
-        }
-        if (checkLogin && checkNickname) {
-            AuthServiceImpl.getInstance().addUser(txtLogin.getText(), txtPassword.getText(), txtNickname.getText());
-            new CreateWindow("auth.fxml", "NetChat - Authorization", false);
-            window.getScene().getWindow().hide();
+            Thread readThread = new Thread(() -> {
+                try {
+                    Message message = (Message) ServerService.getInstance().getIs().readObject();
+                    if (message.getMessage().startsWith(ClientConstants.getPrefixRegisterMessage())) {
+                        if (message.getMessage().contains(ClientConstants.getLoginBusyMessage())) {
+                            txtLogin.setStyle(ClientConstants.getActionFail());
+                            txtLogin.clear();
+                            checkLogin = false;
+                            txtLogin.setPromptText("Login is busy");
+                        } else {
+                            txtLogin.setStyle(ClientConstants.getActionSuccess());
+                            checkLogin = true;
+                        }
+                        if (message.getMessage().contains(ClientConstants.getNicknameBusyMessage())) {
+                            txtNickname.setStyle(ClientConstants.getActionFail());
+                            txtNickname.clear();
+                            checkNickname = false;
+                            txtNickname.setPromptText("Nickname is busy");
+                        } else {
+                            txtNickname.setStyle(ClientConstants.getActionSuccess());
+                            checkNickname = true;
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("Server was broken");
+                }
+            });
+
+            readThread.setDaemon(true);
+            readThread.start();
+            readThread.join();
+            if (checkLogin && checkNickname) {
+                exit();
+            }
         }
     }
 
-    public void exit(ActionEvent actionEvent) throws IOException {
+    public void exit() throws IOException {
+        ServerService.getInstance().destroyInstance();
         new CreateWindow("auth.fxml", "NetChat - Authorization", false);
         window.getScene().getWindow().hide();
     }
