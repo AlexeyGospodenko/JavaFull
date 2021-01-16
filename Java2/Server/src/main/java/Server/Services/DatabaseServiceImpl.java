@@ -1,30 +1,39 @@
-package Chat;
+package Server.Services;
 
 import java.io.Closeable;
 import java.sql.*;
 
-public class AuthServiceImpl implements AuthService, Closeable {
-    private static AuthServiceImpl instance;
-    private int userId;
-    private String nickName;
+public class DatabaseServiceImpl implements DatabaseService, Closeable {
+    private static DatabaseServiceImpl instance;
 
+    private boolean isDbConnect = false;
     private Connection connection;
     private Statement statement;
 
-    private AuthServiceImpl() {
-        try {Class.forName("oracle.jdbc.driver.OracleDriver");
-            connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","CHAT_AUTH","CHAT_AUTH");
+    private DatabaseServiceImpl() {
+    }
+
+    public String dbConnect() {
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            connection = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "CHAT_AUTH", "CHAT_AUTH");
             statement = connection.createStatement();
+            isDbConnect = true;
+            return "DB connection successfully created";
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            return e.getMessage();
         }
     }
 
-    public static AuthServiceImpl getInstance(){
+    public static DatabaseServiceImpl getInstance() {
         if (instance == null) {
-            instance = new AuthServiceImpl();
+            instance = new DatabaseServiceImpl();
         }
         return instance;
+    }
+
+    public boolean isDbConnect() {
+        return isDbConnect;
     }
 
     public void addUser(String login, String pass, String nickName) {
@@ -39,20 +48,20 @@ public class AuthServiceImpl implements AuthService, Closeable {
         }
     }
 
-    public boolean isLoginExists (String login) throws SQLException {
+    public boolean isLoginExists(String login) throws SQLException {
         String sql = String.format("SELECT 1 FROM USER_DAO WHERE LOGIN = '%s'", login);
         ResultSet rs = statement.executeQuery(sql);
         return rs.next();
     }
 
-    public boolean isNicknameExists (String nickName) throws SQLException {
+    public boolean isNicknameExists(String nickName) throws SQLException {
         String sql = String.format("SELECT 1 FROM USER_DAO WHERE NICKNAME = '%s'", nickName);
         ResultSet rs = statement.executeQuery(sql);
         return rs.next();
     }
 
-    public void changeNickname (String newNickname) {
-        String sql = String.format("UPDATE USER_DAO SET NICKNAME = '%s' WHERE USER_ID = %d", newNickname, userId);
+    public void changeNickname(String oldNickname, String newNickname) {
+        String sql = String.format("UPDATE USER_DAO SET NICKNAME = '%s' WHERE NICKNAME = '%s'", newNickname, oldNickname);
         try {
             statement.execute(sql);
         } catch (SQLException e) {
@@ -60,17 +69,16 @@ public class AuthServiceImpl implements AuthService, Closeable {
         }
     }
 
-    public String auth (String login, String pass) throws SQLException {
+    public String auth(String login, String pass) throws SQLException {
+        int userId = 0;
+        String nickName = null;
+
         String sql = String.format("SELECT USER_ID, NICKNAME FROM USER_DAO WHERE LOGIN = '%s' AND PASSWORD = '%s'", login, pass);
         ResultSet rs = statement.executeQuery(sql);
         while (rs.next()) {
             userId = rs.getInt("USER_ID");
             nickName = rs.getString("NICKNAME");
         }
-        return nickName;
-    }
-
-    public String getNickName() {
         return nickName;
     }
 
