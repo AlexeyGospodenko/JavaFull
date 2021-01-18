@@ -81,10 +81,6 @@ public class HistoryServiceImpl implements HistoryService {
             }
         }
 
-        for (String s: history) {
-            System.out.println(s);
-        }
-
         return history;
     }
 

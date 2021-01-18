@@ -11,6 +11,8 @@ import java.net.Socket;
 
 import java.sql.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerController {
     public Button btnStart;
@@ -35,6 +37,8 @@ public class ServerController {
     }
 
     private void createServerThread() {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+
         Thread serverThread = new Thread(() -> {
             running = true;
             try (ServerSocket server = new ServerSocket(Integer.parseInt(txtPort.getText()))) {
@@ -44,7 +48,8 @@ public class ServerController {
                     Socket socket = server.accept();
                     serialHandler = new SerialHandler(socket, this);
                     clients.add(serialHandler);
-                    new Thread(serialHandler).start();
+                    //new Thread(serialHandler).start();
+                    executorService.submit(serialHandler);
                     txtLog.appendText(Message.of(ServerConstants.getServerUser(), "Client accepted").getFormattedMessage());
                     txtLog.appendText(Message.of(ServerConstants.getServerUser(), "Client info: " + socket.getInetAddress()).getFormattedMessage());
                 }

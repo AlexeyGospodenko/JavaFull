@@ -51,7 +51,7 @@ public class ChatController implements Initializable {
             try {
                 while (true) {
                     Message message = (Message) ServerService.getInstance().getIs().readObject();
-                    //HistoryServiceImpl.getInstance().saveMessage(message.getFormattedMessage());
+                    HistoryServiceImpl.getInstance().saveMessage(message.getFormattedMessage());
                     txtChat.appendText(message.getFormattedMessage());
                 }
             } catch (Exception e) {

@@ -121,6 +121,7 @@ public class SerialHandler implements Runnable, Closeable {
                     try {
                         serverController.broadCast(messageLeft);
                     } catch (IOException ioException) {
+                        running = false;
                         ioException.printStackTrace();
                     }
                 }
