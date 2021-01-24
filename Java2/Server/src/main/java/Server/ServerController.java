@@ -4,17 +4,18 @@ import Server.Services.DatabaseServiceImpl;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import java.sql.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 public class ServerController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerController.class);
+
     public Button btnStart;
     public Button btnSend;
     public TextField txtPort;
@@ -37,19 +38,19 @@ public class ServerController {
     }
 
     private void createServerThread() {
-        ExecutorService executorService = Executors.newCachedThreadPool();
-
         Thread serverThread = new Thread(() -> {
             running = true;
             try (ServerSocket server = new ServerSocket(Integer.parseInt(txtPort.getText()))) {
                 txtLog.appendText(Message.of(ServerConstants.getServerUser(), "Server started on port " + txtPort.getText()).getFormattedMessage());
+                LOGGER.info("Server started on port: {}", txtPort.getText());
                 while (running) {
                     txtLog.appendText(Message.of(ServerConstants.getServerUser(), "Waiting for connection").getFormattedMessage());
                     Socket socket = server.accept();
                     serialHandler = new SerialHandler(socket, this);
                     clients.add(serialHandler);
                     //new Thread(serialHandler).start();
-                    executorService.submit(serialHandler);
+                    ExecService.getInstance().getExecutorService().submit(serialHandler);
+                    LOGGER.info("Client accepted. Client info: {}", socket.getInetAddress());
                     txtLog.appendText(Message.of(ServerConstants.getServerUser(), "Client accepted").getFormattedMessage());
                     txtLog.appendText(Message.of(ServerConstants.getServerUser(), "Client info: " + socket.getInetAddress()).getFormattedMessage());
                 }
@@ -102,4 +103,5 @@ public class ServerController {
             txtLog.appendText(Message.of(ServerConstants.getServerUser(), (e.getMessage())).getFormattedMessage());
         }
     }
+
 }
