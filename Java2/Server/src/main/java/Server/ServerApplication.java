@@ -18,4 +18,9 @@ public class ServerApplication extends Application{
         stage.show();
     }
 
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        ExecService.getInstance().getExecutorService().shutdownNow();
+    }
 }

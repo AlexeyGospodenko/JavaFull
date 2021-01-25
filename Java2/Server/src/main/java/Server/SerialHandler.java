@@ -1,6 +1,9 @@
 package Server;
 
 import Server.Services.DatabaseServiceImpl;
+import org.apache.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
@@ -8,11 +11,14 @@ import java.sql.SQLException;
 
 public class SerialHandler implements Runnable, Closeable {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SerialHandler.class);
+
     private final ObjectOutputStream os;
     private final ObjectInputStream is;
     private boolean running;
     private final ServerController serverController;
     private String nickname;
+    private String login;
 
     public SerialHandler(Socket socket, ServerController serverController) throws IOException {
         os = new ObjectOutputStream(socket.getOutputStream());
@@ -49,6 +55,7 @@ public class SerialHandler implements Runnable, Closeable {
                                 DatabaseServiceImpl.getInstance().addUser(data[1], data[2], data[3]);
                             }
                             os.writeObject(Message.of(ServerConstants.getSystemUser(), ServerConstants.getPrefixRegisterMessage() + registrationMessage));
+                            LOGGER.debug(registrationMessage);
                             continue;
                         }
                     }
@@ -61,8 +68,11 @@ public class SerialHandler implements Runnable, Closeable {
                             if (nickname == null) {
                                 os.writeObject(Message.of(ServerConstants.getSystemUser(),
                                         ServerConstants.getPrefixAuthMessage() + ServerConstants.getAuthFailedMessage()));
+                                LOGGER.info("Auth failed login={{}}", data[1]);
                             } else {
                                 os.writeObject(Message.of(ServerConstants.getSystemUser(), ServerConstants.getPrefixAuthMessage() + nickname));
+                                login = data[1];
+                                LOGGER.info("Auth success login={{}}", data[1]);
                                 Message messageJoin = Message.of(ServerConstants.getSystemUser(), "User \"" + nickname + "\" has joined the channel");
                                 serverController.broadCast(messageJoin);
                                 serverController.getTxtChat().appendText(messageJoin.getFormattedMessage());
@@ -83,6 +93,8 @@ public class SerialHandler implements Runnable, Closeable {
                         Message messageFrom = Message.of(nickname, "PM to " + data[0] + ": " + data[1]);
                         serverController.sendMessageTo(messageFrom, nickname);
                         serverController.getTxtChat().appendText(messageFrom.getFormattedMessage());
+
+                        LOGGER.debug("Private message from {{}}, to {{}}, message={{}}", nickname, data[0], data[1]);
                         continue;
                     }
                 }
@@ -98,6 +110,7 @@ public class SerialHandler implements Runnable, Closeable {
                             DatabaseServiceImpl.getInstance().changeNickname(nickname, data[0]);
                             Message messageChangeNickname = Message.of(ServerConstants.getSystemUser(),
                                     "User \"" + nickname + "\" change nickname to \"" + data[0] + "\"");
+                            LOGGER.info("User {{}} change nickname to {{}}", nickname, data[0]);
                             nickname = data[0];
                             serverController.broadCast(messageChangeNickname);
                             serverController.getTxtChat().appendText(messageChangeNickname.getFormattedMessage());
@@ -111,9 +124,9 @@ public class SerialHandler implements Runnable, Closeable {
                     message.setUserName(nickname);
                     serverController.broadCast(message);
                     serverController.getTxtChat().appendText(message.getFormattedMessage());
+                    LOGGER.info("User {{}} send message for all", nickname);
+                    LOGGER.debug("User {{}} send message for all = {{}}", nickname, message.getMessage());
                 }
-
-
             } catch (IOException | ClassNotFoundException e) {
                 if (nickname != null) {
                     Message messageLeft = Message.of(ServerConstants.getSystemUser(), "User \"" + nickname + "\" has left the channel");
@@ -122,7 +135,10 @@ public class SerialHandler implements Runnable, Closeable {
                         serverController.broadCast(messageLeft);
                     } catch (IOException ioException) {
                         running = false;
-                        ioException.printStackTrace();
+                        LOGGER.error(ioException.getMessage() + " login={}", login);
+                        for (int i = 0; i < ioException.getStackTrace().length; i++) {
+                            LOGGER.debug(String.valueOf(ioException.getStackTrace()[i]));
+                        }
                     }
                 }
                 serverController.kickClient(this);
